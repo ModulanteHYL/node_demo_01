@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h5>你的余额为：<span id="balance">&&&money</span></h5>
+    <button id="button">余额-1</button>
+    <script>
+        button.addEventListener('click', function () {
+            let randomName = 'jsonp' + parseInt(Math.random() * 1000000);
+            window[randomName] = function (e) {
+                if (e === 'success') {
+                    let money = parseInt(balance.innerText, 10);
+                    money = money - 1;
+                    balance.innerText = money;
+                }
+            }
+            let script = document.createElement('script');
+            script.src = 'http://localhost:8001/pay?callback=' + randomName;
+            document.body.appendChild(script);
+            script.onload = function (e) {
+                e.currentTarget.remove();
+                delete window[randomName];
+            }
+            script.onerror = function (e) {
+                e.currentTarget.remove();
+                delete window[randomName];
+            }
+        });
+    </script>
+</body>
+
+</html>
